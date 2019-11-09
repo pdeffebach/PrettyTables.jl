@@ -2,30 +2,30 @@
 #
 # Description
 #
-#   Pre-defined highlighters.
+#   Pre-defined highlighters for the text backend.
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ==#
 
-export hl_cell, hl_col, hl_row, hl_lt, hl_leq, hl_gt, hl_geq, hl_value
+export thl_cell, thl_col, thl_row, thl_lt, thl_leq, thl_gt, thl_geq, thl_value
 
 """
-    function hl_cell(i::Number, j::Number, crayon::Crayon)
+    function thl_cell(i::Number, j::Number, crayon::Crayon)
 
 Highlight the cell `(i,j)` with the crayon `crayon`.
 
-    function hl_cell(cells::AbstractVector{NTuple(2,Int)}, crayon::Crayon)
+    function thl_cell(cells::AbstractVector{NTuple(2,Int)}, crayon::Crayon)
 
 Highlights all the cells in `cells` with the crayon `crayon`.
 
 """
-hl_cell(i::Number, j::Number, crayon::Crayon) = Highlighter(
+thl_cell(i::Number, j::Number, crayon::Crayon) = TextHighlighter(
     f = (data,x,y)->begin
         return (x == i) && (y == j)
     end,
     crayon = crayon
 )
 
-hl_cell(cells::AbstractVector{NTuple{2,Int}}, crayon::Crayon) = Highlighter(
+thl_cell(cells::AbstractVector{NTuple{2,Int}}, crayon::Crayon) = TextHighlighter(
     f = (data,x,y)->begin
         return (x,y) ∈ cells
     end,
@@ -33,23 +33,23 @@ hl_cell(cells::AbstractVector{NTuple{2,Int}}, crayon::Crayon) = Highlighter(
 )
 
 """
-    function hl_col(i::Number, crayon::Crayon)
+    function thl_col(i::Number, crayon::Crayon)
 
 Highlight the entire column `i` with the crayon `crayon`.
 
-    function hl_col(cols::AbstractVector{Int}, crayon::Crayon)
+    function thl_col(cols::AbstractVector{Int}, crayon::Crayon)
 
 Highlights all the columns in `cols` with the crayon `crayon`.
 
 """
-hl_col(j::Number, crayon::Crayon) = Highlighter(
+thl_col(j::Number, crayon::Crayon) = TextHighlighter(
     f = (data,x,y)->begin
         return y == j
     end,
     crayon = crayon
 )
 
-hl_col(cols::AbstractVector{Int}, crayon::Crayon) = Highlighter(
+thl_col(cols::AbstractVector{Int}, crayon::Crayon) = TextHighlighter(
     f = (data,x,y)->begin
         return y ∈ cols
     end,
@@ -57,23 +57,23 @@ hl_col(cols::AbstractVector{Int}, crayon::Crayon) = Highlighter(
 )
 
 """
-    function hl_row(i::Number, crayon::Crayon)
+    function thl_row(i::Number, crayon::Crayon)
 
 Highlight the entire row `i` with the crayon `crayon`.
 
-    function hl_row(rows::AbstractVector{Int}, crayon::Crayon)
+    function thl_row(rows::AbstractVector{Int}, crayon::Crayon)
 
 Highlights all the rows in `rows` with the crayon `crayon`.
 
 """
-hl_row(i::Number, crayon::Crayon) = Highlighter(
+thl_row(i::Number, crayon::Crayon) = TextHighlighter(
     f = (data,x,y)->begin
         return x == i
     end,
     crayon = crayon
 )
 
-hl_row(rows::AbstractVector{Int}, crayon::Crayon) = Highlighter(
+thl_row(rows::AbstractVector{Int}, crayon::Crayon) = TextHighlighter(
     f = (data,x,y)->begin
         return x ∈ rows
     end,
@@ -81,12 +81,12 @@ hl_row(rows::AbstractVector{Int}, crayon::Crayon) = Highlighter(
 )
 
 """
-    function hl_lt(n::Number)
+    function thl_lt(n::Number)
 
 Highlight all elements that < `n`.
 
 """
-hl_lt(n::Number) = Highlighter(
+thl_lt(n::Number) = TextHighlighter(
     f = (data,i,j)->begin
         if applicable(<,data[i,j],n) && data[i,j] < n
             return true
@@ -99,12 +99,12 @@ hl_lt(n::Number) = Highlighter(
 )
 
 """
-    function hl_leq(n::Number)
+    function thl_leq(n::Number)
 
 Highlight all elements that ≤ `n`.
 
 """
-hl_leq(n::Number) = Highlighter(
+thl_leq(n::Number) = TextHighlighter(
     f = (data,i,j)->begin
         if applicable(≤,data[i,j],n) && data[i,j] ≤ n
             return true
@@ -117,12 +117,12 @@ hl_leq(n::Number) = Highlighter(
 )
 
 """
-    function hl_gt(n::Number)
+    function thl_gt(n::Number)
 
 Highlight all elements that > `n`.
 
 """
-hl_gt(n::Number) = Highlighter(
+thl_gt(n::Number) = TextHighlighter(
     f = (data,i,j)->begin
         if applicable(>,data[i,j],n) && data[i,j] > n
             return true
@@ -135,12 +135,12 @@ hl_gt(n::Number) = Highlighter(
 )
 
 """
-    function hl_geq(n::Number)
+    function thl_geq(n::Number)
 
 Highlight all elements that ≥ `n`.
 
 """
-hl_geq(n::Number) = Highlighter(
+thl_geq(n::Number) = TextHighlighter(
     f = (data,i,j)->begin
         if applicable(≥,data[i,j],n) && data[i,j] ≥ n
             return true
@@ -153,12 +153,12 @@ hl_geq(n::Number) = Highlighter(
 )
 
 """
-    function hl_value(v::Any)
+    function thl_value(v::Any)
 
 Highlight all the values that matches `data[i,j] == v`.
 
 """
-hl_value(v) = Highlighter(
+thl_value(v) = TextHighlighter(
     f = (data,i,j)->data[i,j] == v,
     crayon = Crayon(bold       = true,
                     foreground = :yellow)
